@@ -53,7 +53,4 @@ resource SPI_SDO 2 C03
 # 7. System Features & Bitbang
 set dshot_bitbang = ON
 set dshot_bitbang_timer = AUTO
-feature -BLACKBOX
 set vbat_scale = 110
-
-save
