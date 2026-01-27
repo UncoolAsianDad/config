@@ -1,42 +1,55 @@
-# using this to re-configure for V-TAIL
-
-
-# 1. HARDWARE RESOURCE REMAPPING
-# Free up M3 and M4 so they can act as servos
+# Free up the pins
 resource MOTOR 3 NONE
 resource MOTOR 4 NONE
+resource SERVO 1 NONE
+resource SERVO 2 NONE
+resource SERVO 3 NONE
+resource SERVO 4 NONE
 
-# Assign pads to Servo Index 1 through 4
-resource SERVO 1 A08  # Pad M3
-resource SERVO 2 A09  # Pad M4
-resource SERVO 3 B00  # Pad SV1
-resource SERVO 4 B01  # Pad SV2
+# Assign M3/M4 pins to Flapperons (Servos 1 & 2)
+resource SERVO 1 A08
+resource SERVO 2 A09
 
-# 2. MOTOR/SERVO SIGNAL PROTOCOL (Crucial for F405)
+# Assign V-Tail to the original Servo pads (Servos 3 & 4)
+resource SERVO 3 B00
+resource SERVO 4 B01
+
+
+# Re-initialize the Timers for PWM (Essential for F405)
+timer A08 AF1
+timer A09 AF1
+timer B00 AF2
+timer B01 AF2
+dma pin A08 0
+dma pin A09 0
+dma pin B00 0
+dma pin B01 0
+
+# Enable Servo Support
 set motor_pwm_protocol = PWM
-set motor_pwm_rate = 480
-set motor_pwm_unseparated = OFF
 set servo_pwm_rate = 50
 
-# 3. MIXER INITIALIZATION
 mixer CUSTOMAIRPLANE
 mmix reset
+mmix 0 1.0 0.0 0.0 0.0  # Motor 1 (C08): Throttle
+mmix 1 1.0 0.0 0.0 0.0  # Motor 2 (C09): Throttle
+
 smix reset
 
-# 4. MOTOR MIX (M1 & M2)
-mmix 0 1.0 0.0 0.0 0.0
-mmix 1 1.0 0.0 0.0 0.0
+# --- FLAPPERONS (A08 & A09) ---
+# Trying the lower shift (Indices 5 and 4)
+smix 0 5 4 100 0 0 100 0   # A08 Roll
+smix 1 4 4 -100 0 0 100 0  # A09 Roll
 
-# 5. SERVO MIX (8-argument syntax)
-# Rule | Servo | Source | Rate | Speed | Min | Max | Box
-# --- FLAPPERONS (M3/M4) ---
-smix 0 0 0 100 0 0 100 0    # M3: Roll
-smix 1 0 9 100 0 0 100 0    # M3: AUX 2 (Flaps)
-smix 2 1 0 -100 0 0 100 0   # M4: Roll (Inverted)
-smix 3 1 9 100 0 0 100 0    # M4: AUX 2 (Flaps)
+# --- V-TAIL (B00 & B01) ---
+# Trying the lower shift (Indices 3 and 2)
+smix 2 3 5 100 0 0 100 0   # B00 Pitch
+smix 3 2 5 100 0 0 100 0   # B01 Pitch
 
-# --- V-TAIL (SV1/SV2) ---
-smix 4 2 1 50 0 0 100 0     # SV1: Pitch
-smix 5 2 2 50 0 0 100 0     # SV1: Yaw
-smix 6 3 1 50 0 0 100 0     # SV2: Pitch
-smix 7 3 2 -50 0 0 100 0    # SV2: Yaw (Inverted)
+# B00 (Index 3) - Yaw Component
+smix 4 3 3 50 0 0 100 0
+
+# B01 (Index 2) - Yaw Component
+smix 5 2 3 50 0 0 100 0
+
+save

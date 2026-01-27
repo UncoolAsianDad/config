@@ -54,3 +54,24 @@ resource SPI_SDO 2 C03
 set dshot_bitbang = ON
 set dshot_bitbang_timer = AUTO
 set vbat_scale = 110
+
+# 8. SERIAL PORT for receiver on UART 3
+# Disable Serial RX on UART2
+serial 1 0 115200 57600 0 115200
+
+# Set provider
+set serialrx_provider = SRXL2
+
+# Ensure UART3 is Serial RX (serial 2 = UART3)
+serial 2 64 115200 57600 0 115200
+serial UART4 0 115200 57600 0 115200
+serial UART5 0 115200 57600 0 115200
+
+
+# Try this name if you still want to check duplexing:
+set serialrx_halfduplex = ON
+
+
+# 9. Mapping
+map TAER1234
+set motor_pwm_protocol = PWM
