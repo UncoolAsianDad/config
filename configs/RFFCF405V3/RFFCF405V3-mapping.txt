@@ -1,0 +1,59 @@
+# 1. Clear existing conflicts
+resource LED_STRIP 1 NONE
+resource MOTOR 5 NONE
+resource MOTOR 6 NONE
+resource MOTOR 7 NONE
+resource MOTOR 8 NONE
+resource PINIO 1 NONE
+resource SERIAL_TX 6 NONE
+resource SERIAL_RX 6 NONE
+resource SDCARD_CS 1 NONE
+resource SDCARD_DETECT 1 NONE
+
+# 2. Motor Mapping
+resource MOTOR 1 C08
+resource MOTOR 2 C09
+resource MOTOR 3 A08
+resource MOTOR 4 A09
+
+# 3. Servo Mapping
+resource SERVO 1 B00
+resource SERVO 2 B01
+
+# 4. UART Mapping
+resource SERIAL_TX 1 B06
+resource SERIAL_RX 1 B07
+resource SERIAL_TX 2 A02
+resource SERIAL_RX 2 A03
+resource SERIAL_TX 3 B10
+resource SERIAL_RX 3 B11
+resource SERIAL_TX 4 A00
+resource SERIAL_RX 4 A01
+resource SERIAL_TX 5 C12
+resource SERIAL_RX 5 D02
+
+# 5. Timer & DMA Fixes (The "Working" Config)
+timer A08 AF1
+timer A09 AF1
+timer C08 AF3
+timer C09 AF3
+dma pin A08 0
+dma pin A09 0
+dma pin C08 0
+dma pin C09 0
+
+# 6. SPI & OSD Peripherals
+resource GYRO_CS 1 A04
+resource GYRO_EXTI 1 C04
+resource OSD_CS 1 B12
+resource SPI_SCK 2 B13
+resource SPI_SDI 2 C02
+resource SPI_SDO 2 C03
+
+# 7. System Features & Bitbang
+set dshot_bitbang = ON
+set dshot_bitbang_timer = AUTO
+feature -BLACKBOX
+set vbat_scale = 110
+
+save
